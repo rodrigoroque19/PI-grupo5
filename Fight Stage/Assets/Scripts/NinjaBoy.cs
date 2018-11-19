@@ -6,29 +6,40 @@ public class NinjaBoy : MonoBehaviour
 {
     Rigidbody2D body;
     Animator anim;
-    //Indicar o lado que o personagem esta olhando
-    bool facingRight = true;
+    SpriteRenderer sp;
 
-    //Adicionar velocidade
+    [Header("Movement Variables")]
     public float maxSpeed = 5f;
-
     bool grounded = true;
     public Transform groundCheck;
     public LayerMask whatIsGround;
     public float groundRadius = 0.2f;
-    bool jump = false;
+    bool doubleJump = false;
+    public float jumpForce = 400f;
+
+    [Header("Attack Variables")]
+    public Transform attackCheck;
+    public float radiusAttack;
+    public LayerMask NinjaGirl;
+    float timeNextAttack;
 
     // Use this for initialization
     void Start()
     {
         body = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
+        sp = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+    
+    public float GetAbsRunVel()
+    {
+        return Mathf.Abs(body.velocity.x);
     }
 
     void FixedUpdate()
@@ -37,30 +48,59 @@ public class NinjaBoy : MonoBehaviour
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
 
-        //Movimento do personagem
-        float move = Input.GetAxis("Horizontal");
-        anim.SetFloat("Velocity", Mathf.Abs(move));
+        move();
 
-        body.velocity = new Vector2(move * maxSpeed, body.velocity.y);
-
-        if (move > 0 && facingRight == true)
+        //Criação do pulo
+        if (Input.GetButtonDown("Jump") && grounded == true)
         {
-            Flip();
+            body.AddForce(new Vector2(0, jumpForce));
+            doubleJump = true;
+        }
+        if (Input.GetButtonDown("Jump") && grounded == false && doubleJump == true)
+        {
+            body.AddForce(new Vector2(0, jumpForce));
+            doubleJump = false;
         }
 
-        if (move < 0 && facingRight == false)
+        //Criação do Attack
+        if(Input.GetKeyDown(KeyCode.F))
         {
-            Flip();
+            anim.SetTrigger("Attack");
         }
-
 
     }
-
-    void Flip()
+    //Movimento do personagem
+    void move()
     {
-        facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        Vector2 direction = Vector2.zero;
+        if (Input.GetKey(KeyCode.A) == true)
+        {
+            direction.x = -1;
+        }
+        else if (Input.GetKey(KeyCode.D) == true)
+        {
+            direction.x = 1;
+        }
+
+        Vector2 vlc = body.velocity;
+        vlc.x = direction.x * maxSpeed;
+        body.velocity = vlc;
+
+        anim.SetFloat("Velocity", GetAbsRunVel());
+        if (body.velocity.x > 0)
+        {
+            sp.flipX = false;
+        }
+        else if (body.velocity.x < 0)
+        {
+            sp.flipX = true;
+        }
     }
+
+    void OnDrawnGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
+    }
+
 }
