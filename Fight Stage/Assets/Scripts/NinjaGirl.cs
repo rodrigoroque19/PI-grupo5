@@ -15,7 +15,7 @@ public class NinjaGirl : MonoBehaviour
     public LayerMask whatIsGround;
     public float groundRadius = 0.2f;
     bool doubleJump = false;
-    public float jumpForce = 400f;
+    public float jumpForce = 300f;
 
     [Header("Attack Variables")]
     public Transform attackCheck;
@@ -35,12 +35,7 @@ public class NinjaGirl : MonoBehaviour
     void Update()
     {
 
-    }
-    
-    public float GetAbsRunVel()
-    {
-        return Mathf.Abs(body.velocity.x);
-    }
+    }    
 
     void FixedUpdate()
     {
@@ -81,26 +76,30 @@ public class NinjaGirl : MonoBehaviour
         else if (Input.GetKey(KeyCode.RightArrow) == true)
         {
             direction.x = 1;
+
         }
 
-        Vector2 vlc = body.velocity;
-        vlc.x = direction.x * maxSpeed;
-        body.velocity = vlc;
+        //Vector2 vlc = body.velocity;
+        //vlc.x = direction.x * maxSpeed;
+        anim.SetFloat("Velocity", Mathf.Abs(body.velocity.x));
+        body.velocity = new Vector2(direction.x * maxSpeed, body.velocity.y);
 
-        anim.SetFloat("Velocity", GetAbsRunVel());
-        if (body.velocity.x > 0)
+        if (direction.x > 0 && sp.flipX == false || direction.x < 0 && sp.flipX == true)
         {
-            sp.flipX = true;
+            Flip();
         }
-        else if (body.velocity.x < 0)
-        {
-            sp.flipX = false;
-        }
+    }
+
+    void Flip()
+    {
+        sp.flipX = !sp.flipX;
+        attackCheck.localPosition = new Vector2(-attackCheck.localPosition.x, attackCheck.localPosition.y);
     }
 
     void OnDrawnGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
+        Gizmos.DrawWireSphere(attackCheck.position, radiusAttack);
     }
 }

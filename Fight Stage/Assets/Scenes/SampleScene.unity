@@ -272,9 +272,9 @@ GameObject:
   m_Component:
   - component: {fileID: 175907660}
   - component: {fileID: 175907659}
+  - component: {fileID: 175907656}
   - component: {fileID: 175907658}
   - component: {fileID: 175907657}
-  - component: {fileID: 175907656}
   - component: {fileID: 175907655}
   - component: {fileID: 175907654}
   m_Layer: 9
@@ -296,14 +296,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 5
-  groundCheck: {fileID: 1179040616}
-  whatIsGround:
+  GroundCheck: {fileID: 0}
+  WhatIsGround:
     serializedVersion: 2
     m_Bits: 1024
-  groundRadius: 0.2
-  jumpForce: 260
-  attackCheck: {fileID: 0}
-  radiusAttack: 0
+  GroundRadius: 0.5
+  jumpForce: 400
+  AttackCheck: {fileID: 549190974}
+  RadiusAttack: 0
   NinjaGirl:
     serializedVersion: 2
     m_Bits: 0
@@ -368,8 +368,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &175907657
-BoxCollider2D:
+--- !u!70 &175907657
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -380,19 +380,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.038966388, y: 0.4867947}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.32, y: 4.39}
-    newSize: {x: 2.32, y: 4.39}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.9572368, y: 3.6276665}
-  m_EdgeRadius: 0
+  m_Offset: {x: -0.012765262, y: 0.023163216}
+  m_Size: {x: 2.139522, y: 4.3436756}
+  m_Direction: 0
 --- !u!50 &175907658
 Rigidbody2D:
   serializedVersion: 4
@@ -438,8 +428,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 175907653}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.23, y: 0.36, z: 0}
-  m_LocalScale: {x: 0.574, y: 0.547, z: 1}
+  m_LocalPosition: {x: -4.2393, y: 0.35, z: 0}
+  m_LocalScale: {x: 0.565964, y: 0.547, z: 1}
   m_Children:
   - {fileID: 1179040616}
   - {fileID: 549190974}
@@ -747,8 +737,8 @@ GameObject:
   - component: {fileID: 1056339348}
   - component: {fileID: 1056339347}
   - component: {fileID: 1056339346}
-  - component: {fileID: 1056339345}
   - component: {fileID: 1056339344}
+  - component: {fileID: 1056339345}
   - component: {fileID: 1056339343}
   - component: {fileID: 1056339342}
   m_Layer: 8
@@ -775,9 +765,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundRadius: 0.3
-  jumpForce: 260
-  attackCheck: {fileID: 0}
-  radiusAttack: 0
+  jumpForce: 400
+  attackCheck: {fileID: 2046434548}
+  radiusAttack: 0.5
   NinjaBoy:
     serializedVersion: 2
     m_Bits: 0
@@ -816,8 +806,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &1056339345
-BoxCollider2D:
+--- !u!70 &1056339345
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -828,19 +818,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.21735853, y: 0.43954182}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.9, y: 5}
-    newSize: {x: 2.9, y: 5}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.1449656, y: 4.1209164}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0.23584998, y: -0.20877536}
+  m_Size: {x: 2.3049462, y: 4.4193835}
+  m_Direction: 0
 --- !u!212 &1056339346
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -931,7 +911,7 @@ GameObject:
   m_Layer: 9
   m_Name: GroundCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1034,7 +1014,7 @@ GameObject:
   m_Layer: 8
   m_Name: groundCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1137,7 +1117,7 @@ GameObject:
   m_Layer: 8
   m_Name: attackCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

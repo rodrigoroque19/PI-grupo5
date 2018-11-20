@@ -11,15 +11,15 @@ public class NinjaBoy : MonoBehaviour
     [Header("Movement Variables")]
     public float maxSpeed = 5f;
     bool grounded = true;
-    public Transform groundCheck;
-    public LayerMask whatIsGround;
-    public float groundRadius = 0.2f;
+    public Transform GroundCheck;
+    public LayerMask WhatIsGround;
+    public float GroundRadius = 0.2f;
     bool doubleJump = false;
-    public float jumpForce = 400f;
+    public float jumpForce = 300f;
 
     [Header("Attack Variables")]
-    public Transform attackCheck;
-    public float radiusAttack;
+    public Transform AttackCheck;
+    public float RadiusAttack;
     public LayerMask NinjaGirl;
     float timeNextAttack;
 
@@ -34,18 +34,13 @@ public class NinjaBoy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-    
-    public float GetAbsRunVel()
-    {
-        return Mathf.Abs(body.velocity.x);
+        
     }
 
     void FixedUpdate()
     {
         //verificar se o personagem está no chao
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        grounded = Physics2D.OverlapCircle(GroundCheck.position, GroundRadius, WhatIsGround);
         anim.SetBool("Ground", grounded);
 
         move();
@@ -63,10 +58,12 @@ public class NinjaBoy : MonoBehaviour
         }
 
         //Criação do Attack
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             anim.SetTrigger("Attack");
         }
+
+        
 
     }
     //Movimento do personagem
@@ -80,27 +77,31 @@ public class NinjaBoy : MonoBehaviour
         else if (Input.GetKey(KeyCode.D) == true)
         {
             direction.x = 1;
+
         }
 
-        Vector2 vlc = body.velocity;
-        vlc.x = direction.x * maxSpeed;
-        body.velocity = vlc;
+        //Vector2 vlc = body.velocity;
+        //vlc.x = direction.x * maxSpeed;
+        anim.SetFloat("Velocity", Mathf.Abs(body.velocity.x));
+        body.velocity = new Vector2(direction.x * maxSpeed, body.velocity.y);
 
-        anim.SetFloat("Velocity", GetAbsRunVel());
-        if (body.velocity.x > 0)
+        if (direction.x > 0 && sp.flipX == true || direction.x < 0 && sp.flipX == false)
         {
-            sp.flipX = false;
+            Flip();
         }
-        else if (body.velocity.x < 0)
-        {
-            sp.flipX = true;
-        }
+    }
+
+    void Flip()
+    {
+        sp.flipX = !sp.flipX;
+        AttackCheck.localPosition = new Vector2(-AttackCheck.localPosition.x, AttackCheck.localPosition.y);
     }
 
     void OnDrawnGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(GroundCheck.position, GroundRadius);
+        Gizmos.DrawWireSphere(AttackCheck.position, RadiusAttack);
     }
 
 }
