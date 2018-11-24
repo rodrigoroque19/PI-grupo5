@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 15
-  productGUID: bf422d89da8ceb44dbe5543e2604b1f2
+  productGUID: 250daab4fadf7004daa38234c2a63583
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -619,8 +619,8 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 38e1805e-c6f6-4be6-9c26-00fe86e30d54
-  projectName: Fight Stage (4)
+  cloudProjectId: 321d1d8c-f502-4e6b-b0b3-40236e714f5a
+  projectName: Fight Stage (5)
   organizationId: andr-awesome-game-company
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0

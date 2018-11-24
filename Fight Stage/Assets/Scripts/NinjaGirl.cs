@@ -4,68 +4,79 @@ using UnityEngine;
 
 public class NinjaGirl : MonoBehaviour
 {
+
     Rigidbody2D body;
+    SpriteRenderer sprite;
     Animator anim;
-    SpriteRenderer sp;
 
-    [Header("Movement Variables")]
-    public float maxSpeed = 5f;
-    bool grounded = true;
+    public float speed = 5f;
+    public float jumpForce = 600f;
+    public float groundRadius = 0.4f;
+    public float radiusAttack = 0.2f;
+    public float timeNextAttack;
+
     public Transform groundCheck;
-    public LayerMask whatIsGround;
-    public float groundRadius = 0.2f;
-    bool doubleJump = false;
-    public float jumpForce = 300f;
-
-    [Header("Attack Variables")]
     public Transform attackCheck;
-    public float radiusAttack;
+
+    public LayerMask whatIsGround;
     public LayerMask NinjaBoy;
-    float timeNextAttack;
+
+    bool doubleJump = false;
+    bool grounded = false;
 
     // Use this for initialization
     void Start()
     {
-        body = gameObject.GetComponent<Rigidbody2D>();
-        anim = gameObject.GetComponent<Animator>();
-        sp = GetComponent<SpriteRenderer>();
+
+        body = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
-    }    
-
-    void FixedUpdate()
-    {
-        //verificar se o personagem está no chao
+        //verificação do solo
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
 
-        move();
+    }
 
-        //Criação de pulo
+    private void FixedUpdate()
+    {
+        move();
+        
+        //verificação do pulo
         if (Input.GetKeyDown(KeyCode.UpArrow) && grounded == true)
         {
-            body.AddForce(new Vector2(0, jumpForce));
+            body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = true;
         }
         if (Input.GetKeyDown(KeyCode.UpArrow) && grounded == false && doubleJump == true)
         {
-            body.AddForce(new Vector2(0, jumpForce));
+            body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = false;
         }
 
-        //Criação do Attack
-        if (Input.GetKeyDown(KeyCode.RightControl))
+        //Criação do ataque e do intervalo de golpes
+        if (timeNextAttack <= 0)
         {
-            anim.SetTrigger("Attack");
+            if (Input.GetKeyDown(KeyCode.RightControl) && body.velocity == new Vector2(0, 0))
+            {
+                anim.SetTrigger("Attack");
+                timeNextAttack = 0.2f;
+                PlayerAttack();
+            }            
+        }
+        else
+        {
+            timeNextAttack -= Time.deltaTime;
         }
 
     }
 
-    //Movimento do personagem
+    //Função de andar
     void move()
     {
         Vector2 direction = Vector2.zero;
@@ -79,26 +90,36 @@ public class NinjaGirl : MonoBehaviour
 
         }
 
-        //Vector2 vlc = body.velocity;
-        //vlc.x = direction.x * maxSpeed;
         anim.SetFloat("Velocity", Mathf.Abs(body.velocity.x));
-        body.velocity = new Vector2(direction.x * maxSpeed, body.velocity.y);
+        body.velocity = new Vector2(direction.x * speed, body.velocity.y);
 
-        if (direction.x > 0 && sp.flipX == false || direction.x < 0 && sp.flipX == true)
+        if (direction.x > 0 && sprite.flipX == false || direction.x < 0 && sprite.flipX == true)
         {
             Flip();
         }
     }
 
+    //Função que altera a escala para que o personagem vire pra direção que esta andando
     void Flip()
     {
-        sp.flipX = !sp.flipX;
+        sprite.flipX = !sprite.flipX;
         attackCheck.localPosition = new Vector2(-attackCheck.localPosition.x, attackCheck.localPosition.y);
     }
 
-    void OnDrawnGizmosSelected()
+    void PlayerAttack()
     {
-        Gizmos.color = Color.red;
+        Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(attackCheck.position, radiusAttack, NinjaBoy);
+        for (int i = 0; i < NinjaBoyAttack.Length; i++)
+        {
+            NinjaBoyAttack[i].SendMessage("Enemy Hit");
+            Debug.Log(NinjaBoyAttack[i].name);
+        }
+    }
+
+    //Função para que fique visivel o contorno do GroundCheck e AttackCheck
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
         Gizmos.DrawWireSphere(attackCheck.position, radiusAttack);
     }
