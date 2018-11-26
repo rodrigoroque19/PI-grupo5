@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class NinjaGirl : MonoBehaviour
 {
@@ -14,15 +16,26 @@ public class NinjaGirl : MonoBehaviour
     public float groundRadius = 0.4f;
     public float radiusAttack = 0.2f;
     public float timeNextAttack;
+    public float timeToRespawn;
+
+    public float[] dano = new float[2];
+    
 
     public Transform groundCheck;
     public Transform attackCheck;
 
+    public Text textPontos;
+
+    public GameObject RespawnNinjaGirl;
+
     public LayerMask whatIsGround;
     public LayerMask NinjaBoy;
+    public NinjaBoy objNinjaBoy;
 
     bool doubleJump = false;
     bool grounded = false;
+
+    public int pontosQueda;
 
     // Use this for initialization
     void Start()
@@ -31,6 +44,7 @@ public class NinjaGirl : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        textPontos.text = pontosQueda.ToString();
 
     }
 
@@ -62,11 +76,16 @@ public class NinjaGirl : MonoBehaviour
         //Criação do ataque e do intervalo de golpes
         if (timeNextAttack <= 0)
         {
+            var a = GameObject.Find("NinjaBoy");
+            
+
             if (Input.GetKeyDown(KeyCode.RightControl) && body.velocity == new Vector2(0, 0))
             {
                 anim.SetTrigger("Attack");
                 timeNextAttack = 0.2f;
                 PlayerAttack();
+                var arma = GameObject.FindWithTag("NinjaBoy").GetComponent<NinjaBoy>();
+                
             }            
         }
         else
@@ -99,6 +118,26 @@ public class NinjaGirl : MonoBehaviour
         }
     }
 
+ 
+    //Verificador de colisoes
+    private void OnTriggerEnter2D(Collider2D collision2D)
+    {
+        //Validador de vidas
+        if (collision2D.gameObject.CompareTag("Death"))
+        {
+            pontosQueda--;
+            textPontos.text = pontosQueda.ToString();
+            transform.position = RespawnNinjaGirl.transform.position;
+
+        }
+
+        //Validador de Respawn
+        if (collision2D.gameObject.CompareTag("Respawn"))
+        {
+            RespawnNinjaGirl = collision2D.gameObject;
+        }
+    }
+
     //Função que altera a escala para que o personagem vire pra direção que esta andando
     void Flip()
     {
@@ -108,11 +147,14 @@ public class NinjaGirl : MonoBehaviour
 
     void PlayerAttack()
     {
+        
         Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(attackCheck.position, radiusAttack, NinjaBoy);
         for (int i = 0; i < NinjaBoyAttack.Length; i++)
         {
-            NinjaBoyAttack[i].SendMessage("Enemy Hit");
             Debug.Log(NinjaBoyAttack[i].name);
+            dano[0] = 300f;
+            dano[1] = 30f;
+            
         }
     }
 
