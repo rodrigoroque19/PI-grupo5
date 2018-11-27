@@ -113,6 +113,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &138825995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+    type: 2}
+  m_PrefabInternal: {fileID: 1133913557}
+  m_Script: {fileID: 11500000, guid: 5b471f585c342564fa9aec44e2aa0236, type: 3}
+--- !u!70 &138825997 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 70062928872071552, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+    type: 2}
+  m_PrefabInternal: {fileID: 1133913557}
 --- !u!1 &372848111
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,7 +177,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 33a893b0151619943a602b37643adf9a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.34
+  m_Volume: 0.521
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -492,7 +503,7 @@ Transform:
   m_GameObject: {fileID: 820805656}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.7134964, y: -1.1800563, z: 0.01953125}
-  m_LocalScale: {x: 2.6466386, y: 1, z: 1}
+  m_LocalScale: {x: 2.6135557, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 661976286}
   m_RootOrder: 1
@@ -506,11 +517,11 @@ BoxCollider2D:
   m_GameObject: {fileID: 820805656}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a9af7cd87cf84ff4eb3ce5364d456ed1, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0048322678, y: 0.008240283}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -521,7 +532,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 1
   serializedVersion: 2
-  m_Size: {x: 3.56, y: 0.44}
+  m_Size: {x: 3.3183813, y: 0.45648062}
   m_EdgeRadius: 0
 --- !u!212 &820805659
 SpriteRenderer:
@@ -626,13 +637,50 @@ Prefab:
       objectReference: {fileID: 1297451816}
     - target: {fileID: 1227929494440864, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64, type: 2}
       propertyPath: m_TagString
-      value: Player
+      value: NinjaBoy
       objectReference: {fileID: 0}
     - target: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
         type: 2}
       propertyPath: RespawnNinjaBoy
       value: 
       objectReference: {fileID: 870476789}
+    - target: {fileID: 1579823716155838, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64, type: 2}
+      propertyPath: m_TagString
+      value: NinjaBoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4406437579950386, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 4406437579950386, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+        type: 2}
+      propertyPath: collision2D
+      value: 
+      objectReference: {fileID: 1336723142}
+    - target: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+        type: 2}
+      propertyPath: forca.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+        type: 2}
+      propertyPath: forca.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351825242957172, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+        type: 2}
+      propertyPath: objNinjaBoy
+      value: 
+      objectReference: {fileID: 1336723140}
+    - target: {fileID: 70062928872071552, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a9af7cd87cf84ff4eb3ce5364d456ed1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f0f78e0e9eb6ae46aa01e82ea55bb64, type: 2}
   m_IsPrefabAsset: 0
@@ -642,6 +690,17 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1421654202}
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &1336723140 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1652277117}
+  m_Script: {fileID: 11500000, guid: 6dbe701d750324648a4395aac9cd147a, type: 3}
+--- !u!70 &1336723142 stripped
+CapsuleCollider2D:
+  m_CorrespondingSourceObject: {fileID: 70279750542665192, guid: 96143fb535d20b849839ccca182faf7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1652277117}
 --- !u!1001 &1421654202
 Prefab:
   m_ObjectHideFlags: 0
@@ -1094,8 +1153,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1616398993}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.627, y: 0.109, z: 0.01953125}
-  m_LocalScale: {x: 4.9224524, y: 2.1242177, z: 1}
+  m_LocalPosition: {x: -0.75, y: 0.03, z: 0.01953125}
+  m_LocalScale: {x: 5.4146976, y: 2.3366396, z: 1.1}
   m_Children: []
   m_Father: {fileID: 661976286}
   m_RootOrder: 0
@@ -1193,13 +1252,60 @@ Prefab:
       objectReference: {fileID: 1551093994}
     - target: {fileID: 1369529813975946, guid: 96143fb535d20b849839ccca182faf7e, type: 2}
       propertyPath: m_TagString
-      value: Player
+      value: NinjaGirl
       objectReference: {fileID: 0}
     - target: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
         type: 2}
       propertyPath: RespawnNinjaGirl
       value: 
       objectReference: {fileID: 937260435}
+    - target: {fileID: 70279750542665192, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: m_Offset.y
+      value: -0.2512044
+      objectReference: {fileID: 0}
+    - target: {fileID: 70279750542665192, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 4.4638634
+      objectReference: {fileID: 0}
+    - target: {fileID: 1222958383170594, guid: 96143fb535d20b849839ccca182faf7e, type: 2}
+      propertyPath: m_TagString
+      value: NinjaGirl
+      objectReference: {fileID: 0}
+    - target: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: objNinjaBoy
+      value: 
+      objectReference: {fileID: 138825995}
+    - target: {fileID: 4909437246516018, guid: 96143fb535d20b849839ccca182faf7e, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 4909437246516018, guid: 96143fb535d20b849839ccca182faf7e, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: collision2D
+      value: 
+      objectReference: {fileID: 138825997}
+    - target: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: forca.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 114125715483264264, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: forca.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 70279750542665192, guid: 96143fb535d20b849839ccca182faf7e,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: a9af7cd87cf84ff4eb3ce5364d456ed1, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96143fb535d20b849839ccca182faf7e, type: 2}
   m_IsPrefabAsset: 0

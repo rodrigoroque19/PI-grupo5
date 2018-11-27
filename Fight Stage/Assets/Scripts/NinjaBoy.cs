@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,28 +11,35 @@ public class NinjaBoy : MonoBehaviour
     SpriteRenderer sprite;
     Animator anim;
 
+    NinjaGirl ninjaGirl;
+
     public float speed = 5f;
     public float jumpForce = 600f;
     public float GroundRadius = 0.45f;
     public float RadiusAttack = 0.2f;
     public float TimeNextAttack;
-    
+
+    public Vector2 forca = new Vector2(30f,15f);
+
     public Transform GroundCheck;
     public Transform AttackCheck;
+            
+    public Collider2D collision2D = new Collider2D();
 
     public Text textPoints;
 
     public GameObject RespawnNinjaBoy;
-    
+
     public LayerMask whatIsGround;
     public LayerMask NinjaGirl;
+    public NinjaGirl objNinjaBoy;
 
     bool grounded = false;
     bool doubleJump = true;
 
     public int PontosQueda;
 
-    // Use this for initialization
+    //============================================================================================================================================================================   
     void Start()
     {
 
@@ -39,35 +47,37 @@ public class NinjaBoy : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         textPoints.text = PontosQueda.ToString();
-
+        ninjaGirl = GameObject.FindObjectOfType<NinjaGirl>();
     }
 
-    // Update is called once per frame
+    //============================================================================================================================================================================
     void Update()
     {
-        //verificação do solo
+        //VALIDADOR DO SOLO
         grounded = Physics2D.OverlapCircle(GroundCheck.position, GroundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
     }
 
     private void FixedUpdate()
     {
+        //CHAMA O ANDAR
         move();
 
 
-        //verificação do pulo
+        //VERIFICAR SE ESTA NO CHAO
         if (Input.GetButtonDown("Jump") && grounded == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = true;
         }
+        //VERIFICA SE PODE DAR PULO DUPLO
         if (Input.GetButtonDown("Jump") && grounded == false && doubleJump == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = false;
         }
 
-        //Criação do ataque e do intervalo de golpes
+        //INTERVALO DE ATAQUES
         if (TimeNextAttack <= 0)
         {
             if (Input.GetKeyDown(KeyCode.T) && body.velocity == new Vector2(0, 0))
@@ -82,7 +92,9 @@ public class NinjaBoy : MonoBehaviour
             TimeNextAttack -= Time.deltaTime;
         }
     }
+    //============================================================================================================================================================================
 
+    //CRIAÇÃO DO MOVIMENTO
     void move()
     {
         Vector2 direction = Vector2.zero;
@@ -105,10 +117,12 @@ public class NinjaBoy : MonoBehaviour
         }
     }
 
-    //Verificador de colisoes
+    //============================================================================================================================================================================
+
+    //VALIDAR NUMERO DE VIDAS E RESPAWN
     private void OnTriggerEnter2D(Collider2D collision2D)
     {
-        //Validador de vidas
+        //VIDAS
         if (collision2D.gameObject.CompareTag("Death"))
         {
             PontosQueda--;
@@ -116,31 +130,43 @@ public class NinjaBoy : MonoBehaviour
             transform.position = RespawnNinjaBoy.transform.position;
         }
 
-        //Validador de Respawn
+        //RESPAWN
         if (collision2D.gameObject.CompareTag("Respawn"))
         {
             RespawnNinjaBoy = collision2D.gameObject;
         }
     }
+    //============================================================================================================================================================================
 
-    //Função pra virar o player pra onde esta indo
+    //FLIP DO PERSONAGEM
     void Flip()
     {
         sprite.flipX = !sprite.flipX;
         AttackCheck.localPosition = new Vector2(-AttackCheck.localPosition.x, AttackCheck.localPosition.y);
     }
+    //============================================================================================================================================================================
 
-    //Função do ataque
+    //ATAQUE DO PERSONAGEM COM AÇÃO DA FORÇA
     void PlayerAttack()
     {
         Collider2D[] NinjaGirlAttack = Physics2D.OverlapCircleAll(AttackCheck.position, RadiusAttack, NinjaGirl);
         for (int i = 0; i < NinjaGirlAttack.Length; i++)
         {
-            //NinjaGirlAttack[i].SendMessage("NinjaGirl Hit");
-            Debug.Log(NinjaGirlAttack[i].name);
+            ninjaGirl.AddForce(forca, ForceMode2D.Impulse);
         }
     }
+    //============================================================================================================================================================================
 
+    //FUNÇAO QUE ADICIONA FORÇA AO CORPO DE OUTRA CLASSE
+    public void AddForce(Vector2 forca, ForceMode2D impulse)
+    {
+
+        this.body.AddForce(forca, impulse);
+        
+    }
+    //============================================================================================================================================================================
+
+    //TORNAR VISIVEL GROUND E ATAQUE CHECK
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

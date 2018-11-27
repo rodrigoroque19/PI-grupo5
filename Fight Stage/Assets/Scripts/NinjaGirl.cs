@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class NinjaGirl : MonoBehaviour
 {
 
@@ -11,15 +10,17 @@ public class NinjaGirl : MonoBehaviour
     SpriteRenderer sprite;
     Animator anim;
 
+    NinjaBoy ninjaBoy;
+
     public float speed = 5f;
     public float jumpForce = 600f;
     public float groundRadius = 0.4f;
     public float radiusAttack = 0.2f;
     public float timeNextAttack;
-    public float timeToRespawn;
 
-    public float[] dano = new float[2];
-    
+    //public Vector2 forca = new Vector2(50f, 15f);    
+    public Vector2 forca;
+    public Collider2D collision2D = new Collider2D();
 
     public Transform groundCheck;
     public Transform attackCheck;
@@ -37,7 +38,7 @@ public class NinjaGirl : MonoBehaviour
 
     public int pontosQueda;
 
-    // Use this for initialization
+    //============================================================================================================================================================================   
     void Start()
     {
 
@@ -45,48 +46,46 @@ public class NinjaGirl : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         textPontos.text = pontosQueda.ToString();
+        ninjaBoy = GameObject.FindObjectOfType<NinjaBoy>();
 
     }
 
-    // Update is called once per frame
+    //============================================================================================================================================================================
     void Update()
     {
-        //verificação do solo
+        //VALIDADOR DO SOLO
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
 
     }
-
+    //============================================================================================================================================================================
     private void FixedUpdate()
     {
+        //CHAMA O ANDAR
         move();
-        
-        //verificação do pulo
+
+        //VERIFICAR SE ESTA NO CHAO
         if (Input.GetKeyDown(KeyCode.UpArrow) && grounded == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = true;
         }
+        //VERIFICA SE PODE DAR PULO DUPLO
         if (Input.GetKeyDown(KeyCode.UpArrow) && grounded == false && doubleJump == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = false;
         }
 
-        //Criação do ataque e do intervalo de golpes
+        //INTERVALO DE ATAQUES
         if (timeNextAttack <= 0)
         {
-            var a = GameObject.Find("NinjaBoy");
-            
-
             if (Input.GetKeyDown(KeyCode.RightControl) && body.velocity == new Vector2(0, 0))
             {
                 anim.SetTrigger("Attack");
                 timeNextAttack = 0.2f;
                 PlayerAttack();
-                var arma = GameObject.FindWithTag("NinjaBoy").GetComponent<NinjaBoy>();
-                
-            }            
+            }
         }
         else
         {
@@ -94,8 +93,9 @@ public class NinjaGirl : MonoBehaviour
         }
 
     }
+    //============================================================================================================================================================================
 
-    //Função de andar
+    //CRIAÇÃO DO MOVIMENTO
     void move()
     {
         Vector2 direction = Vector2.zero;
@@ -118,11 +118,13 @@ public class NinjaGirl : MonoBehaviour
         }
     }
 
- 
-    //Verificador de colisoes
+    //============================================================================================================================================================================
+
+    //VALIDAR NUMERO DE VIDAS E RESPAWN
     private void OnTriggerEnter2D(Collider2D collision2D)
     {
-        //Validador de vidas
+
+        //VIDAS
         if (collision2D.gameObject.CompareTag("Death"))
         {
             pontosQueda--;
@@ -131,34 +133,50 @@ public class NinjaGirl : MonoBehaviour
 
         }
 
-        //Validador de Respawn
+        //RESPAWN
         if (collision2D.gameObject.CompareTag("Respawn"))
         {
             RespawnNinjaGirl = collision2D.gameObject;
         }
-    }
 
-    //Função que altera a escala para que o personagem vire pra direção que esta andando
+    }
+    //============================================================================================================================================================================
+
+    //FLIP DO PERSONAGEM
     void Flip()
     {
         sprite.flipX = !sprite.flipX;
         attackCheck.localPosition = new Vector2(-attackCheck.localPosition.x, attackCheck.localPosition.y);
     }
+    //============================================================================================================================================================================
 
+    //ATAQUE DO PERSONAGEM COM AÇÃO DA FORÇA
     void PlayerAttack()
     {
-        
+
         Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(attackCheck.position, radiusAttack, NinjaBoy);
         for (int i = 0; i < NinjaBoyAttack.Length; i++)
         {
-            Debug.Log(NinjaBoyAttack[i].name);
-            dano[0] = 300f;
-            dano[1] = 30f;
-            
+            ninjaBoy.AddForce(forca, ForceMode2D.Impulse);
         }
     }
+    //============================================================================================================================================================================
 
-    //Função para que fique visivel o contorno do GroundCheck e AttackCheck
+    //FUNÇAO QUE ADICIONA FORÇA AO CORPO DE OUTRA CLASSE
+    public void AddForce(Vector2 forca, ForceMode2D impulse)
+    {
+        int b = 5;
+        for(int a = 2; a < 50; a += 5)
+        {
+            forca = new Vector2((float)(a), (float)(b));
+            b += 3;
+        }
+        this.body.AddForce(forca, impulse);
+
+    }
+    //============================================================================================================================================================================
+
+    //TORNAR VISIVEL GROUND E ATAQUE CHECK
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
