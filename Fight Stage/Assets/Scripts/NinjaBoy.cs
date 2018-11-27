@@ -19,11 +19,11 @@ public class NinjaBoy : MonoBehaviour
     public float RadiusAttack = 0.2f;
     public float TimeNextAttack;
 
-    public Vector2 forca = new Vector2(30f,15f);
+    public Vector2 forca = new Vector2(30f, 15f);
 
     public Transform GroundCheck;
     public Transform AttackCheck;
-            
+
     public Collider2D collision2D = new Collider2D();
 
     public Text textPoints;
@@ -77,10 +77,11 @@ public class NinjaBoy : MonoBehaviour
             doubleJump = false;
         }
 
+    //============================================================================================================================================================================
         //INTERVALO DE ATAQUES
         if (TimeNextAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.T) && body.velocity == new Vector2(0, 0))
+            if (Input.GetKeyDown(KeyCode.LeftShift) && body.velocity == new Vector2(0, 0))
             {
                 anim.SetTrigger("Attack");
                 TimeNextAttack = 0.2f;
@@ -116,7 +117,6 @@ public class NinjaBoy : MonoBehaviour
             Flip();
         }
     }
-
     //============================================================================================================================================================================
 
     //VALIDAR NUMERO DE VIDAS E RESPAWN
@@ -143,14 +143,15 @@ public class NinjaBoy : MonoBehaviour
     {
         sprite.flipX = !sprite.flipX;
         AttackCheck.localPosition = new Vector2(-AttackCheck.localPosition.x, AttackCheck.localPosition.y);
+
     }
     //============================================================================================================================================================================
 
     //ATAQUE DO PERSONAGEM COM AÇÃO DA FORÇA
     void PlayerAttack()
     {
-        Collider2D[] NinjaGirlAttack = Physics2D.OverlapCircleAll(AttackCheck.position, RadiusAttack, NinjaGirl);
-        for (int i = 0; i < NinjaGirlAttack.Length; i++)
+        Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(AttackCheck.position, RadiusAttack, NinjaGirl);
+        for (int i = 0; i < NinjaBoyAttack.Length; i++)
         {
             ninjaGirl.AddForce(forca, ForceMode2D.Impulse);
         }
@@ -160,9 +161,14 @@ public class NinjaBoy : MonoBehaviour
     //FUNÇAO QUE ADICIONA FORÇA AO CORPO DE OUTRA CLASSE
     public void AddForce(Vector2 forca, ForceMode2D impulse)
     {
-
+        int b = 5;
+        for (int a = 2; a < 20; a += 5)
+        {
+            forca = new Vector2((float)(a), (float)(b));
+            b += 3;
+        }
         this.body.AddForce(forca, impulse);
-        
+
     }
     //============================================================================================================================================================================
 
