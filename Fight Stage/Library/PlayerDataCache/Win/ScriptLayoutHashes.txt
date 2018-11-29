@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/gonca/Desktop/Fight Stage.exe
+C:/Users/gonca/Desktop/FightStage/Fight Stage.exe
 SceneListBegin?
 Assets/Scenes/Principal.unity
 SceneListEnd?

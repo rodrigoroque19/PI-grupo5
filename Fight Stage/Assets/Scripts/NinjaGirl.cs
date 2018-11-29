@@ -82,7 +82,7 @@ public class NinjaGirl : MonoBehaviour
         //INTERVALO DE ATAQUES
         if (timeNextAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.RightShift) && body.velocity == new Vector2(0, 0))
+            if (Input.GetKeyDown(KeyCode.RightControl) && body.velocity == new Vector2(0, 0))
             {
                 anim.SetTrigger("Attack");
                 timeNextAttack = 0.2f;

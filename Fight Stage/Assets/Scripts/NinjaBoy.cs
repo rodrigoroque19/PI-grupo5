@@ -32,7 +32,7 @@ public class NinjaBoy : MonoBehaviour
 
     public LayerMask whatIsGround;
     public LayerMask NinjaGirl;
-    public NinjaGirl objNinjaBoy;
+    public NinjaGirl objNinjaGirl;
 
     bool grounded = false;
     bool doubleJump = true;
@@ -81,7 +81,7 @@ public class NinjaBoy : MonoBehaviour
         //INTERVALO DE ATAQUES
         if (TimeNextAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.LeftShift) && body.velocity == new Vector2(0, 0))
+            if (Input.GetKeyDown(KeyCode.LeftControl) && body.velocity == new Vector2(0, 0))
             {
                 anim.SetTrigger("Attack");
                 TimeNextAttack = 0.2f;

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameManeger : MonoBehaviour {
+public class GameManeger : MonoBehaviour
+{
 
     public GameObject PainelCompleto;
     public Text displayContagem;
@@ -11,39 +13,24 @@ public class GameManeger : MonoBehaviour {
     bool isPause = false;
     float contagem = 30f;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         displayContagem.text = displayContagem.ToString();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-		if (contagem > 0.0f)
+        if (contagem > 0.0f)
         {
             contagem -= Time.deltaTime;
             displayContagem.text = contagem.ToString("F2");
         }
-        
-	}
-
-    public void Pause()
-    {        
-        if (isPause)
-        {
-            PainelCompleto.SetActive(false);
-            isPause = false;
-        }
         else
         {
-            PainelCompleto.SetActive(true);
-            isPause = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-    }
-
-    public void Cronometro()
-    {
 
     }
 }
