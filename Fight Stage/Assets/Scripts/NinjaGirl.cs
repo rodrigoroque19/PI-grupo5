@@ -6,20 +6,19 @@ using UnityEngine.UI;
 public class NinjaGirl : MonoBehaviour
 {
 
-    Rigidbody2D body;
-    SpriteRenderer sprite;
+    public Rigidbody2D body;
+    public SpriteRenderer sprite;
     Animator anim;
 
     NinjaBoy ninjaBoy;
 
     public float speed = 5f;
-    public float jumpForce = 600f;
+    public float jumpForce = 400f;
     public float groundRadius = 0.4f;
     public float radiusAttack = 0.2f;
     public float timeNextAttack;
-
     //public Vector2 forca = new Vector2(50f, 15f);    
-    public Vector2 forca;
+    Vector2 forca;
     public Collider2D collision2D = new Collider2D();
 
     public Transform groundCheck;
@@ -82,7 +81,7 @@ public class NinjaGirl : MonoBehaviour
         //INTERVALO DE ATAQUES
         if (timeNextAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.RightControl) && body.velocity == new Vector2(0, 0))
+            if (Input.GetKeyDown(KeyCode.RightControl))
             {
                 anim.SetTrigger("Attack");
                 timeNextAttack = 0.2f;
@@ -155,10 +154,24 @@ public class NinjaGirl : MonoBehaviour
     void PlayerAttack()
     {
 
-        Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(attackCheck.position, radiusAttack, NinjaBoy);
-        for (int i = 0; i < NinjaBoyAttack.Length; i++)
+        Collider2D[] NinjaGirlAttack = Physics2D.OverlapCircleAll(attackCheck.position, radiusAttack, NinjaBoy);
+
+        for (int i = 0; i < NinjaGirlAttack.Length; i++)
         {
-            ninjaBoy.AddForce(forca, ForceMode2D.Impulse);
+            if (this.sprite.flipX)
+            {
+                float x = ninjaBoy.body.position.x + 2;
+                float y = ninjaBoy.body.position.y + 1;
+
+                ninjaBoy.body.MovePosition(new Vector2(x, y));
+            }
+            else
+            {
+
+                float x = ninjaBoy.body.position.x - 2;
+                float y = ninjaBoy.body.position.y + 1;
+                ninjaBoy.body.MovePosition(new Vector2(x, y));
+            }
         }
     }
     //==============================================================================================================================================================================================================================
@@ -166,11 +179,12 @@ public class NinjaGirl : MonoBehaviour
     //FUNÇAO QUE ADICIONA FORÇA AO CORPO DE OUTRA CLASSE
     public void AddForce(Vector2 forca, ForceMode2D impulse)
     {
-        int b = 5;
+        int x = 30;
+        int y = 20;
         for (int a = 2; a < 20; a += 5)
         {
-            forca = new Vector2((float)(a), (float)(b));
-            b += 3;
+            forca = new Vector2((float)(x), (float)(y));
+           
         }
         this.body.AddForce(forca, impulse);
 

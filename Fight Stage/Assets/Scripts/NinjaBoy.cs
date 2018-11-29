@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,24 +6,24 @@ using UnityEngine.UI;
 public class NinjaBoy : MonoBehaviour
 {
 
-    Rigidbody2D body;
-    SpriteRenderer sprite;
+    public Rigidbody2D body;
+    public SpriteRenderer sprite;
     Animator anim;
 
     NinjaGirl ninjaGirl;
 
     public float speed = 5f;
-    public float jumpForce = 600f;
-    public float GroundRadius = 0.45f;
+    public float jumpForce = 400f;
+    public float GroundRadius = 0.4f;
     public float RadiusAttack = 0.2f;
-    public float TimeNextAttack;
+    public float timeNextAttack;
 
-    public Vector2 forca = new Vector2(30f, 15f);
+    //public Vector2 forca = new Vector2(50f, 15f);    
+    Vector2 forca;
+    public Collider2D collision2D = new Collider2D();
 
     public Transform GroundCheck;
     public Transform AttackCheck;
-
-    public Collider2D collision2D = new Collider2D();
 
     public Text textPoints;
 
@@ -34,12 +33,12 @@ public class NinjaBoy : MonoBehaviour
     public LayerMask NinjaGirl;
     public NinjaGirl objNinjaGirl;
 
+    bool doubleJump = false;
     bool grounded = false;
-    bool doubleJump = true;
 
     public int PontosQueda;
+    //==============================================================================================================================================================================================================================   
 
-    //============================================================================================================================================================================   
     void Start()
     {
 
@@ -48,52 +47,55 @@ public class NinjaBoy : MonoBehaviour
         anim = GetComponent<Animator>();
         textPoints.text = PontosQueda.ToString();
         ninjaGirl = GameObject.FindObjectOfType<NinjaGirl>();
+
     }
 
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
+
     void Update()
     {
         //VALIDADOR DO SOLO
         grounded = Physics2D.OverlapCircle(GroundCheck.position, GroundRadius, whatIsGround);
         anim.SetBool("Ground", grounded);
+
     }
+    //==============================================================================================================================================================================================================================
 
     private void FixedUpdate()
     {
         //CHAMA O ANDAR
         move();
 
-
         //VERIFICAR SE ESTA NO CHAO
-        if (Input.GetButtonDown("Jump") && grounded == true)
+        if (Input.GetKeyDown(KeyCode.W) && grounded == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = true;
         }
         //VERIFICA SE PODE DAR PULO DUPLO
-        if (Input.GetButtonDown("Jump") && grounded == false && doubleJump == true)
+        if (Input.GetKeyDown(KeyCode.W) && grounded == false && doubleJump == true)
         {
             body.AddForce(new Vector2(0f, jumpForce));
             doubleJump = false;
         }
 
-    //============================================================================================================================================================================
         //INTERVALO DE ATAQUES
-        if (TimeNextAttack <= 0)
+        if (timeNextAttack <= 0)
         {
-            if (Input.GetKeyDown(KeyCode.LeftControl) && body.velocity == new Vector2(0, 0))
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 anim.SetTrigger("Attack");
-                TimeNextAttack = 0.2f;
+                timeNextAttack = 0.2f;
                 PlayerAttack();
             }
         }
         else
         {
-            TimeNextAttack -= Time.deltaTime;
+            timeNextAttack -= Time.deltaTime;
         }
+
     }
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
 
     //CRIAÇÃO DO MOVIMENTO
     void move()
@@ -117,17 +119,19 @@ public class NinjaBoy : MonoBehaviour
             Flip();
         }
     }
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
 
     //VALIDAR NUMERO DE VIDAS E RESPAWN
     private void OnTriggerEnter2D(Collider2D collision2D)
     {
+
         //VIDAS
         if (collision2D.gameObject.CompareTag("Death"))
         {
             PontosQueda--;
             textPoints.text = PontosQueda.ToString();
             transform.position = RespawnNinjaBoy.transform.position;
+
         }
 
         //RESPAWN
@@ -135,47 +139,64 @@ public class NinjaBoy : MonoBehaviour
         {
             RespawnNinjaBoy = collision2D.gameObject;
         }
+
     }
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
 
     //FLIP DO PERSONAGEM
     void Flip()
     {
         sprite.flipX = !sprite.flipX;
         AttackCheck.localPosition = new Vector2(-AttackCheck.localPosition.x, AttackCheck.localPosition.y);
-
     }
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
 
     //ATAQUE DO PERSONAGEM COM AÇÃO DA FORÇA
     void PlayerAttack()
     {
+
         Collider2D[] NinjaBoyAttack = Physics2D.OverlapCircleAll(AttackCheck.position, RadiusAttack, NinjaGirl);
+
+
         for (int i = 0; i < NinjaBoyAttack.Length; i++)
         {
-            ninjaGirl.AddForce(forca, ForceMode2D.Impulse);
+            if (!this.sprite.flipX)
+            {
+                float x = ninjaGirl.body.position.x + 2;
+                float y = ninjaGirl.body.position.y + 1;
+                ninjaGirl.body.MovePosition(new Vector2(x, y));
+            }
+            else
+            {
+
+                float x = ninjaGirl.body.position.x - 2;
+                float y = ninjaGirl.body.position.y + 1;
+                ninjaGirl.body.MovePosition(new Vector2(x, y));
+            }
         }
     }
-    //============================================================================================================================================================================
+
+    //==============================================================================================================================================================================================================================
 
     //FUNÇAO QUE ADICIONA FORÇA AO CORPO DE OUTRA CLASSE
     public void AddForce(Vector2 forca, ForceMode2D impulse)
     {
-        int b = 5;
+        int x = 150;
+        int y = 20;
         for (int a = 2; a < 20; a += 5)
         {
-            forca = new Vector2((float)(a), (float)(b));
-            b += 3;
+            forca = new Vector2((float)(x), (float)(y));
+
         }
         this.body.AddForce(forca, impulse);
 
     }
-    //============================================================================================================================================================================
+    //==============================================================================================================================================================================================================================
 
     //TORNAR VISIVEL GROUND E ATAQUE CHECK
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(GroundCheck.position, GroundRadius);
         Gizmos.DrawWireSphere(AttackCheck.position, RadiusAttack);
     }
